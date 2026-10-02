@@ -50,7 +50,7 @@ def extract(t):
  o["durations"]=re.findall(r'\b\d+\s*(?:days?|weeks?|months?|siku|wiki|mwezi|miezi)\b',x); return o
 def log(s,a,act,typ,oid="",d=""):s.add(Audit(actor=a,action=act,object_type=typ,object_id=str(oid),details=d))
 boot(); st.set_page_config(page_title="STI Information Assistant",page_icon="🩺",layout="wide")
-st.title("STI Information Assistant"); st.caption("Educational/research prototype — not a diagnostic or prescribing system.")
+st.title("STI Information Assistant"); st.caption("Educational Chatbot and not a diagnostic or prescribing system.")
 mode=st.sidebar.radio("Open",["Learner assistant","Admin"])
 if mode=="Learner assistant":
  lang=st.selectbox("Language / Lugha",[("English","en"),("Kiswahili","sw")],format_func=lambda z:z[0])[1]
@@ -69,7 +69,7 @@ if mode=="Learner assistant":
   s.close()
 else:
  if not st.session_state.get("admin_ok"):
-  st.warning("Demo login is for local testing only. Change it before deployment."); u=st.text_input("Username"); p=st.text_input("Password",type="password")
+  st.warning("Change the password used in the test evironment before deployment."); u=st.text_input("Username"); p=st.text_input("Password",type="password")
   if st.button("Log in"):
    s=Session(); z=s.query(User).filter_by(username=u,active=True).first(); ok=z and verify_password(p,z.password_hash);s.close()
    if ok:st.session_state.admin_ok=True;st.session_state.admin_user=u;st.rerun()
@@ -80,7 +80,7 @@ else:
   t1,t2,t3,t4,t5,t6=st.tabs(["Review content","Create content","Approved content","Audit log","Privacy / retention","Account"])
   with t1:
    s=Session(); pending=s.query(Content).filter_by(status="pending_review").order_by(Content.id).all()
-   st.caption("Approval must be performed by an actual qualified reviewer. The application does not manufacture expert approval.")
+   st.caption("Approval must be performed by an actual qualified reviewer. The application does not do the approval.")
    for c in pending:
     with st.expander(f"#{c.id} [{c.language}] {c.title}"):
      st.write(c.body);st.caption(f"{c.source} | v{c.version}");rv=st.text_input("Reviewer name / role",key=f"r{c.id}");a,b=st.columns(2)
